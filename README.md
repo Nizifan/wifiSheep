@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 预览图
 ![preview](preview.png)
 
@@ -15,3 +16,7 @@
 
 #运行方法
 python3 init.py
+=======
+# wifiSheep
+这是一个示范用的绵羊墙
+>>>>>>> a1da8c5da39ff1215b49a0921ef42b9bc4b674ae
