@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+{% load staticfiles %}
+		<title>Wall of Sheep</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">  
+		<script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+		<script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+	</head>
+	
+	<body style="background-image:url('/static/wifisheep/images/sheep.gif');background-attachment:fixed">
+	
+	<div class="container" style="margin-top:320px;
+	background-color:#FFF;color:grey;
+	height:300px;overflow:auto">
+		
+		<table class="table" >
+		
+		<h3 class="text-info text-center">Wifi Sheep</h3>
+{% if userinfo_list %}
+		<thead>
+			<tr>
+			<td> Account </td>
+			<td> Password </td>
+			<td> Source </td>
+			</tr>
+		</thead>
+		
+		<tbody> 
+        {% for userinfo in userinfo_list %}
+			<tr>
+			<td>{{userinfo.userName}}</td>
+			<td>{{userinfo.password}}</td>
+			<td>{{userinfo.source}}</td>
+			</tr>
+        {% endfor %}
+		</tbody>
+			
+		</table>
+{% else %}
+    <h3 style="text-align:center">No sheeps are available.</h3>
+{% endif %}
+	</div>
+	</body>
+</html>
+
