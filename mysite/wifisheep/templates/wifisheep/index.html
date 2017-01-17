@@ -3,21 +3,44 @@
 	<head>
 {% load staticfiles %}
 		<title>Wall of Sheep</title>
-		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1;">
 		<link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">  
 		<script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
 		<script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		
 	</head>
 	
-	<body style="background-image:url('/static/wifisheep/images/sheep.gif');background-attachment:fixed">
+	<body 
+		style="background-image:url('/static/wifisheep/images/sheep.gif');
+			background-attachment:fixed;
+			opacity:0.9;
+			filter:alpha(opacity=90);">
+			
+	<script type="text/javascript">
+
+
+</script>
 	
-	<div class="container" style="margin-top:320px;
-	background-color:#FFF;color:grey;
-	height:300px;overflow:auto">
+	<div style="width:100%;
+		height:200px;
+		background:#FFF;
+		text-align:center;">
+		<img src="/static/wifisheep/images/title.png" />
+	</div>
+
+	<div id="div_test" class="container" 
+	style="margin-top:100px;
+		background-color:#FFF;
+		color:#484848;
+		font-size:18px;
+		font-family:calibri light;
+		text-align:center;
+		height:35%;
+		overflow:auto;">
 		
 		<table class="table" >
 		
-		<h3 class="text-info text-center">Wifi Sheep</h3>
+	
 {% if userinfo_list %}
 		<thead>
 			<tr>
@@ -26,22 +49,80 @@
 			<td> Source </td>
 			</tr>
 		</thead>
-		
+			
 		<tbody> 
-        {% for userinfo in userinfo_list %}
+      {% for userinfo in userinfo_list %}
 			<tr>
 			<td>{{userinfo.userName}}</td>
 			<td>{{userinfo.password}}</td>
 			<td>{{userinfo.source}}</td>
 			</tr>
         {% endfor %}
+		
 		</tbody>
 			
 		</table>
+		
+
 {% else %}
     <h3 style="text-align:center">No sheeps are available.</h3>
 {% endif %}
 	</div>
+	
+	<script language="JavaScript">
+	
+	
+		function myrefresh()
+			{
+				window.onload = myscroll()
+				window.location.reload();
+			}
+
+		
+		function startmarquee(lh, speed, delay) 
+		{  
+			var t;  
+			var oHeight = 300;/** div的高度 **/　  
+			var p = false;  
+			var o = document.getElementById("div_test");  
+			var preTop = 0;  
+			o.scrollTop = 0; 
+			
+			function start() 
+			{  
+				t = setInterval(scrolling, speed);  
+				o.scrollTop += 1;  
+			}  
+			
+			function scrolling() 
+			{  
+				if (o.scrollTop % lh != 0  
+                    && o.scrollTop % (o.scrollHeight - oHeight - 1) != 0) 
+					{  
+					preTop = o.scrollTop;  
+					o.scrollTop += 1;  
+						if (preTop >= o.scrollHeight || preTop == o.scrollTop) 
+						{  
+							o.scrollTop = 0;  
+						}  
+					} 
+					else 
+					{  
+						clearInterval(t);  
+						setTimeout(start, delay);  
+					}  
+			}  
+			setTimeout(start, delay);  
+		}  
+		window.onload=function()
+		{  
+			/**startmarquee(一次滚动高度,速度,停留时间);**/　　  
+			startmarquee(20, 20, 1500);
+			setTimeout('myrefresh()',30000);
+		} 
+		
+	</script>
+	
 	</body>
 </html>
 

@@ -2,8 +2,9 @@ import pyshark
 import pymysql
 import sys
 import datetime
+import os
 
-def analyze():
+def analyze(str):
 	try:
 		db = pymysql.connect(host="localhost",port=8889,user="root",passwd="root",db="wifi-sheep")
 	except:
@@ -11,8 +12,10 @@ def analyze():
 		sys.exit()
 
 	cursor = db.cursor()
-
-	cap = pyshark.FileCapture('data.cap')
+	
+	filename = 'data' + str + '.cap'
+	cap = pyshark.FileCapture(filename)
+	print("starting analyzing" + str + "package")	
 
 	userNamePatternList = ['"u"','username','userid']
 	passwordPatternList = ['"p"','password']
@@ -51,3 +54,5 @@ def analyze():
 	cursor.close()
 	db.commit()
 	db.close()
+	os.system("rm " + filename)
+
